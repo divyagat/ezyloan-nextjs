@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "server",
+			"path": "../../EzyLone/server"
+		},
+		{
+			"name": "ezyloan-nextjs",
+			"path": ".."
+		},
+		{
+			"name": "public",
+			"path": "../../EzyLone/public"
+		}
+	],
+	"settings": {}
+}

@@ -19,7 +19,7 @@ interface HeroProps {
 
 const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST;
 
-const Hero: React.FC<HeroProps> = ({ page, title, subtitle }) => {
+const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -246,4 +246,4 @@ const Hero: React.FC<HeroProps> = ({ page, title, subtitle }) => {
   );
 };
 
-export default Hero;
+export default HeroSection;
