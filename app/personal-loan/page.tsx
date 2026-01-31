@@ -1,26 +1,156 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Wallet, ArrowRight, Clock, Shield, Zap, CheckCircle, DollarSign, FileText, User, CreditCard, TrendingUp, Award, Star } from 'lucide-react';
-
 import HeroSection from '@/components/HeroSection';
-
+import Script from 'next/script';
 
 const PersonalLoanPage: React.FC = () => {
+  // Structured data for SEO (PersonalLoan schema)
+  const personalLoanSchema = {
+    "@context": "https://schema.org",
+    "@type": "FinancialProduct",
+    "name": "Personal Loan - EzyLoan",
+    "description": "Fulfill your personal financial needs with our hassle-free personal loans. Get instant approval, flexible loan amounts from ₹50,000 to ₹50 lakhs, and competitive interest rates starting from 10.5% p.a.",
+    "category": "Personal Loan",
+    "offers": {
+      "@type": "Offer",
+      "businessFunction": "ProvideLoan",
+      "priceSpecification": {
+        "@type": "PriceSpecification",
+        "priceCurrency": "INR",
+        "price": "0"
+      },
+      "eligibleRegion": {
+        "@type": "State",
+        "name": "Odisha",
+        "addressCountry": "IN"
+      }
+    },
+    "provider": {
+      "@type": "FinancialService",
+      "name": "EzyLoan",
+      "telephone": "+916372977626",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-6372977626",
+        "contactType": "Customer Service",
+        "areaServed": "IN",
+        "availableLanguage": ["English", "Hindi"]
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1st Floor, Hindustan Tyres Building, Pir Bazar, Bhanpur",
+        "addressLocality": "Cuttack",
+        "postalCode": "753011",
+        "addressRegion": "Odisha",
+        "addressCountry": "IN"
+      }
+    },
+    "areaServed": "IN",
+    "availableLanguage": ["English", "Hindi"],
+    "loanTerm": {
+      "@type": "QuantitativeValue",
+      "minValue": "1",
+      "maxValue": "5",
+      "unitText": "Years"
+    },
+    "interestRate": {
+      "@type": "QuantitativeValue",
+      "minValue": "10.5",
+      "maxValue": "18.0",
+      "unitText": "Percent"
+    },
+    "loanAmount": {
+      "@type": "MonetaryAmount",
+      "minValue": "50000",
+      "maxValue": "5000000",
+      "currency": "INR"
+    }
+  };
+
+  // FAQ schema
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the minimum age requirement for a personal loan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The minimum age requirement is 21 years and maximum is 65 years at the time of loan maturity."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the minimum monthly income required for personal loan eligibility?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The minimum monthly income requirement is ₹25,000 net monthly income."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the interest rate range for personal loans?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Interest rates start from 10.5% p.a. and can go up to 18.0% p.a. depending on your credit profile."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the loan tenure available for personal loans?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Loan tenure ranges from 1 to 5 years with flexible repayment options."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is prepayment allowed on personal loans?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, prepayment is allowed on personal loans with minimal charges as per terms and conditions."
+        }
+      }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div 
+      className="min-h-screen bg-white"
+      itemScope
+      itemType="https://schema.org/WebPage"
+    >
+      {/* Structured Data for SEO */}
+      <Script
+        id="personal-loan-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ 
+          __html: JSON.stringify(personalLoanSchema) 
+        }}
+      />
+      
+      <Script
+        id="faq-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ 
+          __html: JSON.stringify(faqSchema) 
+        }}
+      />
+
       {/* Banner Image Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 max-sm:pt-32">
-
-  {/* Hero Image Section */}
+        {/* Hero Image Section */}
         <div className="relative mb-16 max-w-8xl mx-auto overflow-hidden rounded-2xl shadow-xl">
-        <HeroSection
-        page="personal-loan"
-        title="Personal Loan"
-        subtitle="Fulfill your personal financial needs with our hassle-free personal loans"
-      />
+          <HeroSection
+            page="personal-loan"
+            title="Personal Loan"
+            subtitle="Fulfill your personal financial needs with our hassle-free personal loans"
+          />
         </div>
-
-     
       </div>
 
       {/* Main Content */}
@@ -28,11 +158,11 @@ const PersonalLoanPage: React.FC = () => {
         {/* Introduction Section */}
         <div className="mb-8 sm:mb-12 lg:mb-16">
           <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6"> {/* Changed to h1 */}
               <span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
                 Fulfill Your Dreams with Personal Loans
               </span>
-            </h2>
+            </h1>
             <p className="text-base sm:text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed px-4">
               At EzyLoan, we understand that life is full of opportunities and unexpected expenses. Whether you're planning a wedding, going on a vacation, handling medical emergencies, or consolidating debt, our Personal Loan is designed to provide you with the financial flexibility you need.
             </p>
@@ -48,9 +178,17 @@ const PersonalLoanPage: React.FC = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow duration-300">
+            <div 
+              className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+              itemScope
+              itemType="https://schema.org/Service"
+            >
               <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Zap className="w-8 h-8 text-white" />
+                <Zap 
+                  className="w-8 h-8 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">Instant Loan Approval</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -58,9 +196,17 @@ const PersonalLoanPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow duration-300">
+            <div 
+              className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+              itemScope
+              itemType="https://schema.org/Service"
+            >
               <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <DollarSign className="w-8 h-8 text-white" />
+                <DollarSign 
+                  className="w-8 h-8 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">Flexible Loan Amounts</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -68,9 +214,17 @@ const PersonalLoanPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow duration-300">
+            <div 
+              className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+              itemScope
+              itemType="https://schema.org/Service"
+            >
               <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <TrendingUp className="w-8 h-8 text-white" />
+                <TrendingUp 
+                  className="w-8 h-8 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">Attractive Interest Rates</h3>
               <p className="text-gray-600 leading-relaxed">
@@ -96,7 +250,11 @@ const PersonalLoanPage: React.FC = () => {
             <div className="grid grid-cols-2 gap-6">
               <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 text-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <Clock className="w-6 h-6 text-white" />
+                  <Clock 
+                    className="w-6 h-6 text-white" 
+                    aria-hidden="true" 
+                    focusable="false" 
+                  />
                 </div>
                 <h3 className="text-lg font-bold text-gray-800 mb-2">Quick Processing</h3>
                 <p className="text-sm text-gray-600">24-48 hours approval</p>
@@ -104,7 +262,11 @@ const PersonalLoanPage: React.FC = () => {
               
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 text-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-6 h-6 text-white" />
+                  <Shield 
+                    className="w-6 h-6 text-white" 
+                    aria-hidden="true" 
+                    focusable="false" 
+                  />
                 </div>
                 <h3 className="text-lg font-bold text-gray-800 mb-2">Secure Process</h3>
                 <p className="text-sm text-gray-600">100% safe & secure</p>
@@ -115,8 +277,11 @@ const PersonalLoanPage: React.FC = () => {
           <div className="rounded-3xl overflow-hidden shadow-2xl">
             <img 
               src="/personal-side.png" 
-              alt="Personal Loan Benefits" 
+              alt="Personal Loan Benefits - Quick approval, flexible amounts, competitive rates" 
               className="w-full h-auto object-cover"
+              width="800"
+              height="600"
+              loading="lazy"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1000&auto=format&fit=crop';
@@ -136,7 +301,11 @@ const PersonalLoanPage: React.FC = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <DollarSign className="w-8 h-8 text-white" />
+                <DollarSign 
+                  className="w-8 h-8 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">Loan Amount</h3>
               <div className="space-y-3">
@@ -157,7 +326,11 @@ const PersonalLoanPage: React.FC = () => {
 
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <TrendingUp className="w-8 h-8 text-white" />
+                <TrendingUp 
+                  className="w-8 h-8 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">Interest Rate</h3>
               <div className="space-y-3">
@@ -178,7 +351,11 @@ const PersonalLoanPage: React.FC = () => {
 
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Clock className="w-8 h-8 text-white" />
+                <Clock 
+                  className="w-8 h-8 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">Tenure & Fees</h3>
               <div className="space-y-3">
@@ -208,36 +385,68 @@ const PersonalLoanPage: React.FC = () => {
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl hover:shadow-lg transition-shadow duration-300">
+            <div 
+              className="text-center p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl hover:shadow-lg transition-shadow duration-300"
+              itemScope
+              itemType="https://schema.org/QuantitativeValue"
+            >
               <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <User className="w-10 h-10 text-white" />
+                <User 
+                  className="w-10 h-10 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="font-bold text-gray-800 mb-3 text-lg">Age Criteria</h3>
               <p className="text-gray-600 text-lg font-medium">21 - 65 years</p>
               <p className="text-sm text-gray-500 mt-2">At the time of loan maturity</p>
             </div>
             
-            <div className="text-center p-8 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl hover:shadow-lg transition-shadow duration-300">
+            <div 
+              className="text-center p-8 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl hover:shadow-lg transition-shadow duration-300"
+              itemScope
+              itemType="https://schema.org/QuantitativeValue"
+            >
               <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <DollarSign className="w-10 h-10 text-white" />
+                <DollarSign 
+                  className="w-10 h-10 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="font-bold text-gray-800 mb-3 text-lg">Monthly Income</h3>
               <p className="text-gray-600 text-lg font-medium">₹25,000+</p>
               <p className="text-sm text-gray-500 mt-2">Net monthly income</p>
             </div>
             
-            <div className="text-center p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl hover:shadow-lg transition-shadow duration-300">
+            <div 
+              className="text-center p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl hover:shadow-lg transition-shadow duration-300"
+              itemScope
+              itemType="https://schema.org/QuantitativeValue"
+            >
               <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <FileText className="w-10 h-10 text-white" />
+                <FileText 
+                  className="w-10 h-10 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="font-bold text-gray-800 mb-3 text-lg">Employment</h3>
               <p className="text-gray-600 text-lg font-medium">Salaried/Self-employed</p>
               <p className="text-sm text-gray-500 mt-2">Stable employment history</p>
             </div>
             
-            <div className="text-center p-8 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl hover:shadow-lg transition-shadow duration-300">
+            <div 
+              className="text-center p-8 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl hover:shadow-lg transition-shadow duration-300"
+              itemScope
+              itemType="https://schema.org/QuantitativeValue"
+            >
               <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <TrendingUp className="w-10 h-10 text-white" />
+                <TrendingUp 
+                  className="w-10 h-10 text-white" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
               </div>
               <h3 className="font-bold text-gray-800 mb-3 text-lg">Credit Score</h3>
               <p className="text-gray-600 text-lg font-medium">650+</p>
@@ -259,24 +468,44 @@ const PersonalLoanPage: React.FC = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <div className="flex items-center text-lg">
-                <CheckCircle className="w-6 h-6 mr-2 text-green-300" />
+                <CheckCircle 
+                  className="w-6 h-6 mr-2 text-green-300" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
                 <span>Instant Approval</span>
               </div>
               <div className="flex items-center text-lg">
-                <CheckCircle className="w-6 h-6 mr-2 text-green-300" />
+                <CheckCircle 
+                  className="w-6 h-6 mr-2 text-green-300" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
                 <span>Minimal Documentation</span>
               </div>
               <div className="flex items-center text-lg">
-                <CheckCircle className="w-6 h-6 mr-2 text-green-300" />
+                <CheckCircle 
+                  className="w-6 h-6 mr-2 text-green-300" 
+                  aria-hidden="true" 
+                  focusable="false" 
+                />
                 <span>Competitive Rates</span>
               </div>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/apply-now" className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              <Link 
+                href="/apply" 
+                className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                aria-label="Apply for personal loan now and get instant approval"
+              >
                 Apply Now - Get Instant Approval
               </Link>
-              <Link to="/contact" className="border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300">
+              <Link 
+                href="/contact" 
+                className="border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300"
+                aria-label="Contact EzyLoan for personal loan inquiries"
+              >
                 Contact Us
               </Link>
             </div>
