@@ -1,27 +1,29 @@
+'use client';
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Lock, User } from 'lucide-react';
 import axios from 'axios';
 
-const SERVER_HOST = import.meta.env.VITE_SERVER_HOST;
+const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'http://localhost:5000';
 
-const Login = () => {
+const AdminLogin = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
@@ -30,8 +32,8 @@ const Login = () => {
       const response = await axios.post(`${SERVER_HOST}/api/auth/login`, formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate('/admin');
-    } catch (error: any) {
+      router.push('/admin');
+    } catch (error) {
       setError(error.response?.data?.message || 'Login failed. Please try again.');
     }
 
@@ -93,11 +95,9 @@ const Login = () => {
             {isSubmitting ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
-       
       </div>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;
