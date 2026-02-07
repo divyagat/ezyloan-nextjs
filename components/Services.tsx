@@ -258,7 +258,7 @@ const Services = () => {
               >
                 <div className="bg-gray-50 p-4 flex justify-between items-center cursor-pointer">
                   <h4 className="font-semibold text-gray-800 flex items-center">
-                    <HelpCircle className="w-5 h-5 text-blue-500 mr-2" />
+                    {/* <HelpCircle className="w-5 h-5 text-blue-500 mr-2" /> */}
                     {faq.question}
                   </h4>
                   <ChevronDown className="w-5 h-5 text-gray-500" />

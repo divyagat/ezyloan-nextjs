@@ -285,41 +285,41 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
         </div>
       </div>
 
-      {/* Banking Partners (Home Page Only) */}
-      {page === "home" && bankLogos.length > 0 && (
-        <div className="w-full px-4 py-8">
-          <div className="max-w-7xl mx-auto bg-white/50 backdrop-blur rounded-2xl p-6 border border-gray-200">
-            <h2 className="text-xl font-bold text-center text-gray-800 mb-4">
-              Our Banking Partners
-            </h2>
-            <div className="relative overflow-hidden">
-              <div className="flex animate-scroll">
-                {[...bankLogos, ...bankLogos].map((logo, idx) => (
-                  <div 
-                    key={idx} 
-                    className="flex-none w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 px-3 py-2"
-                  >
-                    <div className="relative h-12 flex items-center justify-center">
-                      {/* Fallback handling for partner logos */}
-                      <Image
+      {/* Banking Partners (home only) */}
+      {page === 'home' && (
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-8 md:pb-16 pt-4 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 md:p-8 shadow-lg">
+              <div className="flex items-center justify-center gap-4 mb-2 md:mb-4">
+                <div className="h-[2px] w-16 md:w-24 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+                <h2 className="text-base md:text-2xl font-bold text-center bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                  Our Banking Partners
+                </h2>
+                <div className="h-[2px] w-12 md:w-24 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+              </div>
+              <p className="text-xs md:text-base text-center mb-3 md:mb-6 text-gray-600 italic">
+                Trusted by India's leading financial institutions
+              </p>
+              <div className="relative overflow-hidden">
+                <div
+                  className="flex transition-transform duration-1000"
+                  style={{ transform: `translateX(-${bankLogoPosition * (100 / 6)}%)` }}
+                >
+                  {[...bankLogos, ...bankLogos].map((logo, index) => (
+                    <div key={index} className="flex-none w-1/3 md:w-1/6 px-2 md:px-4">
+                      <img
                         src={logo}
-                        alt={`Banking partner ${idx + 1}`}
-                        fill
-                        className="object-contain grayscale hover:grayscale-0 transition"
-                        unoptimized
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = FALLBACK_LOGO;
-                        }}
+                        alt={`Bank Partner ${index + 1}`}
+                        className="h-16 md:h-20 object-contain mx-auto hover:scale-110 transition-all duration-300"
                       />
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
-
       {/* Auto-scroll animation */}
       <style jsx global>{`
         @keyframes scroll {

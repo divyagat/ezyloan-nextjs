@@ -18,7 +18,7 @@ import Script from 'next/script';
 import HeroSection from '@/components/HeroSection';
 
 // Next.js requires NEXT_PUBLIC_ prefix for client-side env vars
-const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'https://api.ezyloan.co.in';
+const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'http://0.0.0.0:3001';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -184,7 +184,7 @@ const Contact = () => {
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-br from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl"></div>
       </div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mt-8">
         {/* Hero Section - Ensure Hero component uses next/image */}
         <div className="relative mb-16 max-w-7xl mx-auto overflow-hidden rounded-2xl shadow-xl">
           <HeroSection

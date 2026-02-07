@@ -8,8 +8,9 @@ import Script from "next/script";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
 
+
 // Next.js requires NEXT_PUBLIC_ prefix for client-side env vars
-const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'https://api.ezyloan.co.in';
+const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'http://0.0.0.0:3001';
 
 const ApplyNowPage: React.FC = () => {
   const router = useRouter();
@@ -49,7 +50,7 @@ const ApplyNowPage: React.FC = () => {
       });
 
       // ✅ Redirect to Thank You page after successful submission
-      router.push("/thank-you");
+      router.push("/ThankYouPage");
 
       // Reset form
       setFormData({
@@ -142,28 +143,7 @@ const ApplyNowPage: React.FC = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50"
-      itemScope
-      itemType="https://schema.org/WebPage"
-    >
-      {/* Structured Data for SEO */}
-      <Script
-        id="loan-application-structured-data"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ 
-          __html: JSON.stringify(loanApplicationSchema) 
-        }}
-      />
-      
-      <Script
-        id="benefits-structured-data"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ 
-          __html: JSON.stringify(benefitsSchema) 
-        }}
-      />
-
+   <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 ">
       <div className="max-w-10xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 max-sm:pt-32">
         {/* Hero Image Section */}
         <div className="relative mb-16 max-w-8xl mx-auto overflow-hidden rounded-2xl shadow-xl">
@@ -176,78 +156,61 @@ const ApplyNowPage: React.FC = () => {
       </div>
 
       {/* Form + Benefits Section */}
-      <div className="pt-16 sm:pt-20 lg:pt-24">
+      <div className="pt-16 sm:pt-20 lg:pt-10 ">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Loan Application Form */}
-            <div 
-              className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg p-8 text-white"
-              itemScope
-              itemType="https://schema.org/ApplyAction"
-            >
-              <h1 className="text-2xl font-bold mb-6">Apply for Your Loan</h1>
+            <div className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg p-8 text-white mb-10">
+              <h2 className="text-2xl font-bold mb-6">Apply for Your Loan</h2>
 
-              <form 
-                onSubmit={handleSubmit} 
-                className="space-y-6"
-                noValidate
-                aria-label="Loan application form"
-              >
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Personal Details */}
                 <div>
-                  <h2 className="font-semibold mb-4 text-blue-100">
+                  <h3 className="font-semibold mb-4 text-blue-100">
                     Personal Details
-                  </h2>
+                  </h3>
                   <div className="space-y-4">
                     <input
                       type="text"
-                      id="fullName"
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
                       required
-                      aria-required="true"
                       placeholder="Enter your full name"
-                      className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
+                      className="w-full px-4 bg-white py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
                     />
-                    <input
+                     <input
                       type="email"
-                      id="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      aria-required="true"
                       placeholder="Enter your email address"
-                      className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
+                      className="w-full px-4 bg-white py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
                     />
                     <input
                       type="tel"
-                      id="phoneNumber"
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleChange}
                       required
-                      aria-required="true"
                       placeholder="Enter your phone number"
-                      className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
+                      className="w-full px-4 bg-white   py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
                     />
                   </div>
                 </div>
 
                 {/* Loan Type */}
                 <div>
-                  <h2 className="font-semibold mb-4 text-blue-100">
+                  <h3 className="font-semibold mb-4 text-blue-100">
                     Loan Details
-                  </h2>
+                  </h3>
                   <select
-                    id="loanType"
                     name="loanType"
                     value={formData.loanType}
                     onChange={handleChange}
                     required
-                    aria-required="true"
-                    className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
+                    className="w-full px-4 bg-white py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
                   >
                     <option value="">Select Loan Type</option>
                     <option value="personal">Personal Loan</option>
@@ -263,17 +226,15 @@ const ApplyNowPage: React.FC = () => {
 
                 {/* Employment */}
                 <div>
-                  <h2 className="font-semibold mb-4 text-blue-100">
+                  <h3 className="font-semibold mb-4 text-blue-100">
                     Employment Details
-                  </h2>
+                  </h3>
                   <select
-                    id="employmentType"
                     name="employmentType"
                     value={formData.employmentType}
                     onChange={handleChange}
                     required
-                    aria-required="true"
-                    className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
+                    className="w-full px-4 bg-white py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
                   >
                     <option value="">Employment Type</option>
                     <option value="salaried">Salaried</option>
@@ -288,48 +249,42 @@ const ApplyNowPage: React.FC = () => {
 
                 {/* Address */}
                 <div>
-                  <h2 className="font-semibold mb-4 text-blue-100">
+                  <h3 className="font-semibold mb-4 text-blue-100">
                     Address Details
-                  </h2>
+                  </h3>
                   <div className="space-y-4">
                     <input
                       type="text"
-                      id="city"
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
                       required
-                      aria-required="true"
                       placeholder="City *"
-                      className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
+                      className="w-full px-4 bg-white py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
                     />
                     <input
                       type="text"
-                      id="pincode"
                       name="pincode"
                       value={formData.pincode}
                       onChange={handleChange}
                       required
-                      aria-required="true"
                       placeholder="Pincode *"
-                      className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
+                      className="w-full px-4 bg-white py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
                     />
                   </div>
                 </div>
 
                 {/* CIBIL */}
                 <div>
-                  <h2 className="font-semibold mb-4 text-blue-100">
+                  <h3 className="font-semibold mb-4 text-blue-100">
                     Additional Information
-                  </h2>
+                  </h3>
                   <select
-                    id="cibilScore"
                     name="cibilScore"
                     value={formData.cibilScore}
                     onChange={handleChange}
                     required
-                    aria-required="true"
-                    className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
+                    className="w-full bg-white px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-300 outline-none text-gray-900"
                   >
                     <option value="">CIBIL Score Range</option>
                     <option value="300-549">300-549 (Poor)</option>
@@ -345,19 +300,13 @@ const ApplyNowPage: React.FC = () => {
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full bg-white text-blue-600 py-3 px-6 rounded-lg font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50"
-                  aria-busy={isSubmitting}
-                  aria-label={isSubmitting ? "Submitting your loan application" : "Submit loan application"}
                 >
                   {isSubmitting ? "Submitting..." : "Submit Application"}
                 </button>
 
                 {/* Error Message */}
                 {submitMessage && (
-                  <div 
-                    className="p-4 rounded-lg bg-red-50 text-red-800"
-                    role="alert"
-                    aria-live="polite"
-                  >
+                  <div className="p-4 rounded-lg bg-red-50 text-red-800">
                     {submitMessage}
                   </div>
                 )}
@@ -366,11 +315,7 @@ const ApplyNowPage: React.FC = () => {
 
             {/* Right Side - Benefits */}
             <div className="space-y-6 sm:space-y-8">
-              <div 
-                className="text-center"
-                itemScope 
-                itemType="https://schema.org/AboutPage"
-              >
+              <div className="text-center">
                 <h2 className="text-3xl font-bold text-gray-800 mb-4">
                   Why Choose EzyLoan?
                 </h2>
@@ -402,33 +347,11 @@ const ApplyNowPage: React.FC = () => {
                 />
               </div>
 
-              <div 
-                className="bg-gradient-to-r from-blue-600 to-cyan-500 p-4 sm:p-6 rounded-xl text-white"
-                itemScope
-                itemType="https://schema.org/ContactPoint"
-              >
+              <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-4 sm:p-6 rounded-xl text-white">
                 <h3 className="text-xl font-semibold mb-4">Need Help?</h3>
                 <div className="space-y-2">
-                  <p className="flex items-center">
-                    <span className="mr-2" aria-hidden="true">📞</span>
-                    <a 
-                      href="tel:+916372977626" 
-                      className="hover:underline"
-                      aria-label="Call EzyLoan at +91 6372977626"
-                    >
-                      +91 6372977626
-                    </a>
-                  </p>
-                  <p className="flex items-center">
-                    <span className="mr-2" aria-hidden="true">✉️</span>
-                    <a 
-                      href="mailto:contact@ezyloan.co.in" 
-                      className="hover:underline"
-                      aria-label="Email EzyLoan at contact@ezyloan.co.in"
-                    >
-                      contact@ezyloan.co.in
-                    </a>
-                  </p>
+                  <p className="flex items-center">📞 +91 6372977626</p>
+                  <p className="flex items-center">✉️ contact@ezyloan.co.in</p>
                 </div>
               </div>
             </div>
@@ -452,30 +375,15 @@ const BenefitCard = ({
   desc: string;
 }) => {
   return (
-    <div 
-      className="flex items-start space-x-4 p-6 bg-white rounded-xl shadow-lg"
-      itemScope
-      itemType="https://schema.org/HowToStep"
-    >
+    <div className="flex items-start space-x-4 p-6 bg-white rounded-xl shadow-lg">
       <div
         className={`w-12 h-12 bg-${iconColor}-100 rounded-full flex items-center justify-center flex-shrink-0`}
-        aria-hidden="true"
       >
         <span className={`text-${iconColor}-600 text-xl`}>✔</span>
       </div>
       <div>
-        <h3 
-          className="text-lg font-semibold text-gray-800 mb-2"
-          itemProp="name"
-        >
-          {title}
-        </h3>
-        <p 
-          className="text-gray-600"
-          itemProp="text"
-        >
-          {desc}
-        </p>
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
+        <p className="text-gray-600">{desc}</p>
       </div>
     </div>
   );
