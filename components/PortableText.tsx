@@ -3,39 +3,13 @@
 
 import { PortableText as PortableTextComponent } from '@portabletext/react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { client } from '@/lib/sanity';
-
-const imageUrlBuilder = (client: any) => {
-  return {
-    image: (source: any) => {
-      return {
-        width: (w: number) => {
-          return {
-            url: () => {
-              if (!source?.asset?._ref) return '';
-              const imageId = source.asset._ref.replace('image-', '').replace(/-.*/, '');
-              return `https://cdn.sanity.io/images/${client.config().projectId}/${client.config().dataset}/${imageId}.webp?w=${w}&auto=format`;
-            }
-          };
-        }
-      };
-    }
-  };
-};
-
-const builder = imageUrlBuilder(client);
-
-function urlFor(source: any) {
-  return builder.image(source);
-}
 
 const components = {
   marks: {
     link: ({ children, value }: any) => {
       const href = value?.href || '';
       
-      // Handle internal links
+      // Internal links
       if (href.startsWith('/') && !href.startsWith('//')) {
         return (
           <Link href={href} className="text-blue-600 hover:underline font-medium">
@@ -49,7 +23,7 @@ const components = {
         <a
           href={href}
           target="_blank"
-          rel="noopener noreferrer nofollow"
+          rel="noopener noreferrer"
           className="text-blue-600 hover:underline font-medium"
         >
           {children}
@@ -58,29 +32,19 @@ const components = {
     },
   },
   types: {
-    image: ({ value }: any) => {
-      if (!value?.asset?._ref) return null;
-      
-      const imageUrl = urlFor(value)
-        .width(800)
-        .url();
-
-      return (
-        <div className="my-8 text-center">
-          <Image
-            src={imageUrl}
-            alt={value.alt || 'Blog image'}
-            width={800}
-            height={450}
-            className="rounded-lg shadow-md mx-auto"
-            loading="lazy"
-          />
-          {value.caption && (
-            <p className="mt-2 text-sm text-gray-600">{value.caption}</p>
-          )}
-        </div>
-      );
-    },
+    image: ({ value }: any) => (
+      <div className="my-8 text-center">
+        <img
+          src={value?.asset?.url || value}
+          alt={value.alt || 'Image'}
+          className="max-w-full h-auto rounded-lg"
+          loading="lazy"
+        />
+        {value.caption && (
+          <p className="mt-2 text-sm text-gray-600">{value.caption}</p>
+        )}
+      </div>
+    ),
   },
   block: {
     h2: ({ children }: any) => (
@@ -112,12 +76,7 @@ const components = {
   },
 };
 
-interface PortableTextProps {
-  value: any;
-}
-
-export default function PortableText({ value }: PortableTextProps) {
+export default function PortableText({ value }: { value: any }) {
   if (!value || value.length === 0) return null;
-  
   return <PortableTextComponent value={value} components={components} />;
 }
