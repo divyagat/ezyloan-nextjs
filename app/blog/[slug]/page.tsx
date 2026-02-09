@@ -5,87 +5,58 @@ import PortableText from '@/components/PortableText';
 
 export const revalidate = 3600;
 
-type Props = {
-  params: { slug: string };
-};
+export async function generateStaticParams() {
+  const slugs = await getAllSlugs();
+  return slugs.map((s: any) => ({ slug: s.slug }));
+}
 
 export async function generateMetadata(
-  { params }: Props
+  { params }: { params: { slug: string } }
 ): Promise<Metadata> {
   const post = await getPost(params.slug);
 
-  if (!post) {
-    return { title: 'Post Not Found | EzyLoan' };
-  }
+  if (!post) return { title: 'Post Not Found' };
 
   return {
     title: post.title,
     description: post.metaDescription,
-    openGraph: {
-      title: post.title,
-      description: post.metaDescription,
-      images: post.mainImage ? [post.mainImage] : [],
-    },
   };
 }
 
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
-  return slugs.map((s) => ({ slug: s.slug }));
-}
-
-export default async function BlogPostPage({ params }: Props) {
+export default async function BlogPostPage(
+  { params }: { params: { slug: string } }
+) {
   const post = await getPost(params.slug);
 
   if (!post) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Link href="/blog" className="text-blue-600">
-          ← Back to Blog
-        </Link>
-      </div>
-    );
+    return <Link href="/blog">← Back to blog</Link>;
   }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow overflow-hidden">
+      <div className="max-w-4xl mx-auto bg-white rounded shadow">
 
-        {/* Header */}
-        <div className="p-8 border-b">
-          {post.category && (
-            <span className="inline-block mb-4 px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-700">
-              {post.category}
-            </span>
-          )}
-
-          <h1 className="text-3xl md:text-4xl font-bold mb-3">
-            {post.title}
-          </h1>
-
-          <p className="text-sm text-gray-500">
-            {new Date(post.publishDate).toLocaleDateString()}
-            {post.author && ` • ${post.author}`}
-          </p>
-        </div>
-
-        {/* Image */}
         {post.mainImage && (
           <img
             src={post.mainImage}
-            alt={post.title}
             className="w-full h-96 object-cover"
+            alt={post.title}
           />
         )}
 
-        {/* Content */}
-        <div className="prose prose-lg max-w-none p-8">
-          <PortableText value={post.content} />
-        </div>
+        <div className="p-8">
+          <h1 className="text-3xl font-bold mb-3">{post.title}</h1>
 
-        {/* Footer */}
-        <div className="border-t p-6">
-          <Link href="/blog" className="text-blue-600 hover:underline">
+          <p className="text-sm text-gray-500 mb-6">
+            {new Date(post.publishDate).toDateString()}
+            {post.author && ` • ${post.author}`}
+          </p>
+
+          <div className="prose max-w-none">
+            <PortableText value={post.body} />
+          </div>
+
+          <Link href="/blog" className="text-blue-600 mt-6 inline-block">
             ← Back to Blog
           </Link>
         </div>

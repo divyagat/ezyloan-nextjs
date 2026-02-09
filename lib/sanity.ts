@@ -1,19 +1,17 @@
 import { createClient } from '@sanity/client';
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET!;
-
 export const client = createClient({
-  projectId,
-  dataset,
-  apiVersion: '2024-02-07',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  apiVersion: '2024-01-01',
   useCdn: true,
 });
 
-// All posts
+// Blog list
 export async function getAllPosts() {
   return client.fetch(`
-    *[_type == "blogPost"] | order(publishDate desc) {
+    *[_type == "post" && defined(slug.current)]
+    | order(publishDate desc) {
       title,
       "slug": slug.current,
       metaDescription,
@@ -25,15 +23,15 @@ export async function getAllPosts() {
   `);
 }
 
-// Single post
+// Single blog
 export async function getPost(slug: string) {
   return client.fetch(
     `
-    *[_type == "blogPost" && slug.current == $slug][0]{
+    *[_type == "post" && slug.current == $slug][0]{
       title,
       metaDescription,
       publishDate,
-      content,
+      body,
       "mainImage": mainImage.asset->url,
       category,
       author
@@ -46,6 +44,8 @@ export async function getPost(slug: string) {
 // Slugs
 export async function getAllSlugs() {
   return client.fetch(`
-    *[_type == "blogPost"]{ "slug": slug.current }
+    *[_type == "post" && defined(slug.current)]{
+      "slug": slug.current
+    }
   `);
 }
