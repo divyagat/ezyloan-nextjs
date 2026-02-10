@@ -20,7 +20,7 @@ interface HeroProps {
 const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || "";
 
 // Fallback image must exist in public folder
-const FALLBACK_BANNER = "/fallback-banner.jpg"; 
+const FALLBACK_BANNER = "/fallback-banner.jpg";
 const FALLBACK_LOGO = "/fallback-logo.png";
 
 const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
@@ -32,7 +32,7 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
   // Validate and normalize image URL
   const getValidImageUrl = (url: string): string => {
     if (!url || typeof url !== "string" || url.trim() === "") return FALLBACK_BANNER;
-    
+
     const trimmed = url.trim();
     // Handle relative paths from backend (prepend SERVER_HOST if needed)
     if (trimmed.startsWith("/") && SERVER_HOST && !trimmed.startsWith("//")) {
@@ -40,7 +40,7 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
     }
     // Handle protocol-relative URLs
     if (trimmed.startsWith("//")) return `https:${trimmed}`;
-    
+
     return trimmed;
   };
 
@@ -75,12 +75,12 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
         setIsLoading(true);
         setError(null);
         const response = await axios.get(`${SERVER_HOST}/api/banners?page=${encodeURIComponent(page)}`);
-        
+
         // Filter active banners AND validate image URLs
         const validBanners = (response.data || [])
-          .filter((banner: Banner) => 
-            banner.isActive && 
-            banner.image && 
+          .filter((banner: Banner) =>
+            banner.isActive &&
+            banner.image &&
             typeof banner.image === "string" &&
             banner.image.trim() !== ""
           )
@@ -90,13 +90,13 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
           }));
 
         setBanners(validBanners);
-        
+
         if (validBanners.length === 0) {
           console.warn(`No valid banners found for page: ${page}`);
         }
       } catch (err: any) {
-        const errorMsg = err.response?.status === 404 
-          ? "Banners not found for this page" 
+        const errorMsg = err.response?.status === 404
+          ? "Banners not found for this page"
           : "Failed to load banners. Please try again later.";
         console.error("Banner fetch error:", err);
         setError(errorMsg);
@@ -134,10 +134,10 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
 
   const [bankLogoPosition, setBankLogoPosition] = useState(0);
 
-  const nextSlide = () => 
+  const nextSlide = () =>
     banners.length > 1 && setCurrentSlide((prev) => (prev + 1) % banners.length);
-  
-  const prevSlide = () => 
+
+  const prevSlide = () =>
     banners.length > 1 && setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
 
   // Loading state
@@ -160,7 +160,7 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
               Backend: {SERVER_HOST}
             </p>
           )}
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="mt-3 px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition"
           >
@@ -186,11 +186,10 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
   return (
     <section
       id={page === "home" ? "home" : undefined}
-      className={`relative overflow-hidden ${
-        page === "home"
+      className={`relative overflow-hidden ${page === "home"
           ? "min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50"
           : "min-h-[16vh]"
-      }`}
+        }`}
     >
       {/* Banner Carousel */}
       <div className={`w-full relative z-10 ${page === "home" ? "pt-24" : ""}`}>
@@ -198,9 +197,8 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
           {banners.map((banner, index) => (
             <div
               key={banner._id}
-              className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${
-                currentSlide === index ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${currentSlide === index ? "opacity-100" : "opacity-0"
+                }`}
             >
               {/* CRITICAL FIX: Validate src before rendering Image */}
               {banner.image && typeof banner.image === "string" && banner.image.trim() !== "" ? (
@@ -226,9 +224,9 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
                   unoptimized
                 />
               )}
-              
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              
+
               {title && page === "home" && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white px-4 max-w-3xl">
@@ -253,9 +251,8 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition ${
-                    currentSlide === index ? "bg-white scale-110" : "bg-white/50"
-                  }`}
+                  className={`w-3 h-3 rounded-full transition ${currentSlide === index ? "bg-white scale-110" : "bg-white/50"
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                   aria-current={currentSlide === index ? "true" : "false"}
                 />
@@ -286,37 +283,45 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
       </div>
 
       {/* Banking Partners (home only) */}
-      {page === 'home' && (
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-8 md:pb-16 pt-4 relative z-10">
+      {page === "home" && (
+        <div className="w-full px-4 py-10">
           <div className="max-w-7xl mx-auto">
-            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 md:p-8 shadow-lg">
-              <div className="flex items-center justify-center gap-4 mb-2 md:mb-4">
-                <div className="h-[2px] w-16 md:w-24 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
-                <h2 className="text-base md:text-2xl font-bold text-center bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                  Our Banking Partners
-                </h2>
-                <div className="h-[2px] w-12 md:w-24 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
-              </div>
-              <p className="text-xs md:text-base text-center mb-3 md:mb-6 text-gray-600 italic">
-                Trusted by India's leading financial institutions
-              </p>
-              <div className="relative overflow-hidden">
-                <div
-                  className="flex transition-transform duration-1000"
-                  style={{ transform: `translateX(-${bankLogoPosition * (100 / 6)}%)` }}
-                >
-                  {[...bankLogos, ...bankLogos].map((logo, index) => (
-                    <div key={index} className="flex-none w-1/3 md:w-1/6 px-2 md:px-4">
-                      <img
-                        src={logo}
-                        alt={`Bank Partner ${index + 1}`}
-                        className="h-16 md:h-20 object-contain mx-auto hover:scale-110 transition-all duration-300"
-                      />
-                    </div>
-                  ))}
-                </div>
+
+            {/* 🔹 TEXT OUTSIDE THE BOX */}
+            <div className="flex items-center justify-center gap-4 mb-2 md:mb-4">
+              <div className="h-[2px] w-16 md:w-24 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+              <h2 className="text-base md:text-3xl font-bold text-center bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                Our Banking Partners
+              </h2>
+              <div className="h-[2px] w-12 md:w-24 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+            </div>
+            <p className="text-xs md:text-base text-center mb-3 md:mb-6 text-gray-600 italic">
+              Trusted by India's leading financial institutions
+            </p>
+
+            {/* 🔹 BOX WITH ONLY IMAGES */}
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-lg overflow-hidden">
+              <div
+                className="flex transition-transform duration-1000"
+                style={{
+                  transform: `translateX(-${bankLogoPosition * (100 / 6)}%)`,
+                }}
+              >
+                {[...bankLogos, ...bankLogos].map((logo, index) => (
+                  <div
+                    key={index}
+                    className="flex-none w-1/2 md:w-1/6 px-4"
+                  >
+                    <img
+                      src={logo}
+                      alt="Bank logo"
+                      className="h-24 md:h-28 object-contain mx-auto hover:scale-110 transition"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
+
           </div>
         </div>
       )}
