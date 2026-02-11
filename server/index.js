@@ -50,6 +50,7 @@ const allowedOrigins = [
   'http://72.60.204.205',
   'http://ezyloan.co.in',
   'https://ezyloan.co.in',
+  'https://www.ezyloan.co.in',
   'http://srv1050467.hstgr.cloud',
   'https://srv1050467.hstgr.cloud'
 ].map(origin => origin.trim());

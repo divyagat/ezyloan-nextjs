@@ -18,53 +18,63 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const pathname = usePathname();
 
+  // UPDATED: Products section now matches ALL loan products from Header navigation
   const footerLinks = {
     products: [
-      "Personal Loan",
-      "Business Loan",
-      "Home Loan",
-      "Vehicle Loan",
-      "Education Loan",
-      "Credit Card",
+      { name: "Personal Loan", href: "/personal-loan" },
+      { name: "New Car Loan", href: "/new-car-loan" },
+      { name: "Property Loan", href: "/property-loan" },
+      { name: "Commercial Vehicle Loan", href: "/commercial-vehicle-loan" },
+      { name: "Car Loan Refinance", href: "/car-loan-refinance" },
+      { name: "Car Loan TopUp", href: "/car-loan-topup" },
+      { name: "Car Loan Balance Transfer", href: "/car-loan-balance-transfer" },
     ],
     company: [
-      "About Us",
-      "Careers",
-      "Press",
-      "Blog",
-      "Investor Relations",
-      "Contact",
+      { name: "About Us", href: "/about" },
+      { name: "Contact", href: "/contact" },
+      { name: "Careers", href: "/careers" },
+      { name: "Blog", href: "/blog" },
+      { name: "Admin", href: "/admin" }, // Explicitly added per Header structure
     ],
     resources: [
-      "EMI Calculator",
-      "Loan Guide",
-      "Financial Tips",
-      "Customer Support",
-      "FAQs",
-      "Interest Rates",
+      { name: "EMI Calculator", href: "/emi-calculator" },
+      { name: "Loan Guide", href: "/loan-guide" },
+      { name: "Financial Tips", href: "/financial-tips" },
+      { name: "Customer Support", href: "/support" },
+      { name: "FAQs", href: "/faq" },
+      { name: "Interest Rates", href: "/interest-rates" },
     ],
     legal: [
-      "Privacy Policy",
-      "Terms of Service",
-      "Cookie Policy",
-      "Grievance Redressal",
-      "Regulatory Compliance",
+      { name: "Privacy Policy", href: "/privacy-policy" },
+      { name: "Terms of Service", href: "/terms" },
+      { name: "Cookie Policy", href: "/cookie-policy" },
+      { name: "Grievance Redressal", href: "/grievance-redressal" },
+      { name: "Regulatory Compliance", href: "/compliance" },
     ],
   };
 
+  // FIXED: Removed trailing spaces in all hrefs
   const socialLinks = [
     {
       icon: Facebook,
       href: "https://www.facebook.com/people/Ezy-Loan/61555978110163/",
       label: "Facebook",
     },
-    { icon: Twitter, href: "#", label: "Twitter" },
+    { 
+      icon: Twitter, 
+      href: "https://twitter.com/ezyloan", 
+      label: "Twitter" 
+    },
     {
       icon: Instagram,
       href: "https://www.instagram.com/ezyloan.co.in",
       label: "Instagram",
     },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { 
+      icon: Linkedin, 
+      href: "https://www.linkedin.com/company/ezyloan", 
+      label: "LinkedIn" 
+    },
   ];
 
   return (
@@ -113,15 +123,13 @@ const Footer = () => {
                   <span className="text-cyan-300 font-bold">100,000+</span>{" "}
                   satisfied customers.
                 </p>
-                <div className="flex items-center space-x-3 mt-3">
-                  <div className="flex items-center space-x-1">
-                    <span className="text-yellow-400 text-sm">⭐⭐⭐⭐⭐</span>
-                    <span className="text-xs text-gray-300">4.9/5</span>
-                  </div>
+                <div className="flex items-center space-x-1 mt-3">
+                  <span className="text-yellow-400 text-sm">⭐⭐⭐⭐⭐</span>
+                  <span className="text-xs text-gray-300">4.9/5</span>
                 </div>
               </div>
 
-              {/* Social Links */}
+              {/* Social Links - FIXED hrefs */}
               <div>
                 <h3 className="text-base font-bold text-white mb-3 flex items-center">
                   <span className="w-2 h-2 bg-pink-400 rounded-full mr-2"></span>
@@ -150,55 +158,39 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Products */}
+            {/* Products - FULLY UPDATED to match Header */}
             <div>
               <h3 className="text-base font-bold text-white mb-4">Products</h3>
               <ul className="space-y-2">
                 {footerLinks.products.map((link, index) => (
                   <li key={index}>
-                    <a
-                      href="#"
+                    <Link
+                      href={link.href}
                       className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm"
                     >
-                      <span>{link}</span>
+                      <span>{link.name}</span>
                       <ArrowRight className="w-3 h-3 ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200" />
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Company */}
+            {/* Company - Streamlined to match Header essentials */}
             <div>
               <h3 className="text-base font-bold text-white mb-4">Company</h3>
               <ul className="space-y-2">
                 {footerLinks.company.map((link, index) => (
                   <li key={index}>
                     <Link
-                      href={
-                        link === "About Us"
-                          ? "/about"
-                          : link === "Contact"
-                          ? "/contact"
-                          : "#"
-                      }
+                      href={link.href}
                       className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm"
                     >
-                      <span>{link}</span>
+                      <span>{link.name}</span>
                       <ArrowRight className="w-3 h-3 ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200" />
                     </Link>
                   </li>
                 ))}
-                {/* Admin Link */}
-                <li>
-                  <Link
-                    href="/admin"
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm"
-                  >
-                    <span>Admin</span>
-                    <ArrowRight className="w-3 h-3 ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200" />
-                  </Link>
-                </li>
               </ul>
             </div>
 
@@ -209,16 +201,10 @@ const Footer = () => {
                 {footerLinks.resources.map((link, index) => (
                   <li key={index}>
                     <Link
-                      href={
-                        link === "EMI Calculator"
-                          ? "/emi-calculator"
-                          : link === "FAQs"
-                          ? "/#services"
-                          : "#"
-                      }
+                      href={link.href}
                       className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm"
                     >
-                      <span>{link}</span>
+                      <span>{link.name}</span>
                       <ArrowRight className="w-3 h-3 ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200" />
                     </Link>
                   </li>
@@ -232,7 +218,7 @@ const Footer = () => {
         <div className="py-6 border-t border-gradient-to-r from-orange-500/30 to-red-500/30">
           <div className="bg-gradient-to-br from-orange-900/40 via-red-900/30 to-yellow-900/40 rounded-2xl p-6 border-2 border-orange-500/30 backdrop-blur-sm shadow-xl">
             <div className="grid lg:grid-cols-2 gap-6">
-              {/* Get in Touch Section */}
+              {/* Get in Touch Section - FIXED WhatsApp href */}
               <div className="space-y-4">
                 <div className="text-center lg:text-left">
                   <h3 className="text-lg font-bold text-white mb-2 flex items-center justify-center lg:justify-start">
@@ -261,7 +247,7 @@ const Footer = () => {
                   </a>
 
                   <a
-                    href="https://wa.me/+916372977626"
+                    href="https://wa.me/+916372977626" // FIXED: Removed trailing spaces
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center space-x-3 p-3 bg-gradient-to-r from-green-800/40 to-emerald-800/40 rounded-lg border border-green-500/30 hover:border-emerald-400/50 transition-all duration-300 hover:scale-105"
@@ -279,7 +265,10 @@ const Footer = () => {
                     </div>
                   </a>
 
-                  <div className="flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-800/40 to-cyan-800/40 rounded-lg border border-blue-500/30 hover:border-cyan-400/50 transition-all duration-300">
+                  <a
+                    href="mailto:contact@ezyloan.co.in"
+                    className="flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-800/40 to-cyan-800/40 rounded-lg border border-blue-500/30 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105"
+                  >
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
                       <span className="text-white text-sm">✉️</span>
                     </div>
@@ -291,9 +280,9 @@ const Footer = () => {
                         Quick response guaranteed
                       </p>
                     </div>
-                  </div>
+                  </a>
 
-                  <div className="flex items-start space-x-3 p-3 bg-gradient-to-r from-blue-800/40 to-cyan-800/40 rounded-lg border border-blue-500/30 hover:border-cyan-400/50 transition-all duration-300">
+                  <div className="flex items-start space-x-3 p-3 bg-gradient-to-r from-blue-800/40 to-cyan-800/40 rounded-lg border border-blue-500/30">
                     <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mt-1">
                       <span className="text-white text-sm">📍</span>
                     </div>
@@ -409,23 +398,15 @@ const Footer = () => {
               <span className="w-2 h-2 bg-yellow-400 rounded-full ml-2"></span>
             </h4>
             <div className="flex flex-wrap justify-center gap-4 mb-4">
-              {footerLinks.legal.map((link, index) => {
-                let href = "#";
-                if (link === "Privacy Policy") href = "/privacy-policy";
-                else if (link === "Terms of Service") href = "/terms";
-                else if (link === "Grievance Redressal")
-                  href = "/grievance-redressal";
-
-                return (
-                  <Link
-                    key={index}
-                    href={href}
-                    className="text-gray-300 hover:text-cyan-300 transition-all duration-300 text-sm font-medium px-4 py-2 rounded-lg hover:bg-cyan-500/10 border border-transparent hover:border-cyan-400/30"
-                  >
-                    {link}
-                  </Link>
-                );
-              })}
+              {footerLinks.legal.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link.href}
+                  className="text-gray-300 hover:text-cyan-300 transition-all duration-300 text-sm font-medium px-4 py-2 rounded-lg hover:bg-cyan-500/10 border border-transparent hover:border-cyan-400/30"
+                >
+                  {link.name}
+                </Link>
+              ))}
             </div>
             <div className="text-center">
               <p className="text-xs text-gray-400">

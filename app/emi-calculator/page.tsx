@@ -1,3 +1,8 @@
+"use client";
+
+
+import Link from "next/link";
+
 import React, { useState, useEffect } from 'react';
 import { Calculator, ArrowRight, Info, TrendingUp, PieChart, DollarSign, Clock, Zap } from 'lucide-react';
 
@@ -213,12 +218,15 @@ const EMICalculatorPage: React.FC = () => {
               </div>
 
               <div className="pt-4">
-                <button className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-500 flex items-center justify-center group shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 hover:scale-105 relative overflow-hidden">
+                <Link
+                  href="/apply-now"
+                  className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-500 flex items-center justify-center group shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 hover:scale-105 relative overflow-hidden"
+                >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <Zap className="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform duration-300" />
                   Apply for This Loan
                   <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform duration-300" />
-                </button>
+                </Link>
               </div>
             </div>
           </div>

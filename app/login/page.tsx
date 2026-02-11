@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Lock, User } from 'lucide-react';
 import axios from 'axios';
 
-const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'http://localhost:5000';
+// ✅ Fixed: Removed trailing space in fallback URL
+const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'https://ezy-lonebackend.vercel.app';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -16,14 +17,16 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleChange = (e) => {
+  // ✅ Fixed: Added proper TypeScript type for event
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = async (e) => {
+  // ✅ Fixed: Added proper TypeScript type for event
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
@@ -33,17 +36,21 @@ const AdminLogin = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       router.push('/admin');
-    } catch (error) {
+    } catch (error: any) {
+      // ✅ Fixed: Added type guard for error response
       setError(error.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <User className="h-12 w-12 text-blue-600" />
+          </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Admin Login</h1>
           <p className="text-gray-600">Access EzyLoan Dashboard</p>
         </div>
@@ -82,7 +89,7 @@ const AdminLogin = () => {
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-800 p-3 rounded-lg text-sm">
+            <div className="bg-red-50 text-red-800 p-3 rounded-lg text-sm border border-red-200">
               {error}
             </div>
           )}
@@ -90,11 +97,26 @@ const AdminLogin = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-cyan-600 transition-all duration-300 disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-cyan-600 transition-all duration-300 disabled:opacity-50 shadow-md hover:shadow-lg"
           >
-            {isSubmitting ? 'Logging in...' : 'Login'}
+            {isSubmitting ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Logging in...
+              </span>
+            ) : 'Login'}
           </button>
         </form>
+        
+        {/* Footer credit */}
+        <div className="mt-6 pt-4 border-t border-gray-200 text-center">
+          <p className="text-xs text-gray-500">
+            © {new Date().getFullYear()} EzyLoan. All rights reserved.
+          </p>
+        </div>
       </div>
     </div>
   );

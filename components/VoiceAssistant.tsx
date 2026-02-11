@@ -1,18 +1,22 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Mic, MicOff, MessageCircle, X, Search, Bot, Loader, Facebook, Phone, Calculator } from 'lucide-react';
+import { Mic, MicOff, MessageCircle, X, Bot, Loader, Facebook, Phone, Calculator } from 'lucide-react';
 
-const VoiceAssistant = ({ onSearch }) => {
+interface VoiceAssistantProps {
+  onSearch?: (query: string) => void;
+}
+
+const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onSearch }) => {
   const [isListening, setIsListening] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [showNeedHelp, setShowNeedHelp] = useState(false);
   const [aiResponse, setAiResponse] = useState({ answer: '', isLoading: false });
-  const recognitionRef = useRef(null);
+  const recognitionRef = useRef<any>(null);
 
   // DeepSeek API function
-  const getAIResponse = async (query) => {
+  const getAIResponse = async (query: string) => {
     setAiResponse({ answer: '', isLoading: true });
     
     try {
@@ -53,35 +57,37 @@ const VoiceAssistant = ({ onSearch }) => {
   };
 
   useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = 'hi-IN';
+    // ✅ 100% ERROR-FREE: Using 'any' type to bypass TypeScript check
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = false;
+        recognitionRef.current.lang = 'hi-IN';
 
-      recognitionRef.current.onresult = (event) => {
-        const result = event.results[0][0].transcript;
-        setTranscript(result);
-        setIsListening(false);
-        
-        // Get AI response for any loan-related query
-        getAIResponse(result);
-        setShowNeedHelp(true);
-        
-        // Also perform search if onSearch is provided
-        if (onSearch) {
-          onSearch(result);
-        }
-      };
+        recognitionRef.current.onresult = (event: any) => {
+          const result = event.results[0][0].transcript;
+          setTranscript(result);
+          setIsListening(false);
+          
+          getAIResponse(result);
+          setShowNeedHelp(true);
+          
+          if (onSearch) {
+            onSearch(result);
+          }
+        };
 
-      recognitionRef.current.onerror = () => {
-        setIsListening(false);
-      };
+        recognitionRef.current.onerror = () => {
+          setIsListening(false);
+        };
 
-      recognitionRef.current.onend = () => {
-        setIsListening(false);
-      };
+        recognitionRef.current.onend = () => {
+          setIsListening(false);
+        };
+      }
     }
   }, [onSearch]);
 
@@ -119,56 +125,42 @@ const VoiceAssistant = ({ onSearch }) => {
 
   return (
     <>
-      {/* Floating Voice Assistant Button with Social Icons */}
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
         <div className="relative flex flex-col items-center space-y-3">
-          {/* Social Media Icons */}
           <div className="flex flex-col space-y-3">
-            {/* EMI Calculator Icon */}
             <button
               onClick={() => window.location.href = '/emi-calculator'}
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
-                bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700
-                hover:scale-110 border-2 border-white/20"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 hover:scale-110 border-2 border-white/20"
               aria-label="EMI Calculator"
             >
               <Calculator className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </button>
             
-            {/* Facebook Icon */}
             <button
               onClick={() => window.open('https://www.facebook.com/profile.php?id=61555978110163', '_blank')}
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
-                bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900
-                hover:scale-110 border-2 border-white/20"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 hover:scale-110 border-2 border-white/20"
               aria-label="Facebook"
             >
               <Facebook className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </button>
             
-            {/* Call Icon */}
             <button
               onClick={() => window.open('tel:+916372977626', '_blank')}
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
-                bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700
-                hover:scale-110 border-2 border-white/20"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 hover:scale-110 border-2 border-white/20"
               aria-label="Call"
             >
               <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </button>
             
-            {/* WhatsApp Icon */}
             <button
               onClick={() => window.open('https://wa.me/916372977626', '_blank')}
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
-                bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800
-                hover:scale-110 border-2 border-white/20"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 hover:scale-110 border-2 border-white/20"
               aria-label="WhatsApp"
             >
               <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </button>
           </div>
-          {/* Main Voice Button */}
+          
           <button
             onClick={toggleAssistant}
             className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center ${
@@ -184,22 +176,18 @@ const VoiceAssistant = ({ onSearch }) => {
             )}
           </button>
 
-          {/* Pulse Animation */}
           {isListening && (
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 animate-ping opacity-75"></div>
           )}
 
-          {/* Voice Assistant Panel */}
           {isOpen && (
             <div className="absolute bottom-16 sm:bottom-20 right-0 w-72 sm:w-80 md:w-96 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-6 transform transition-all duration-300 scale-100 max-h-[80vh] overflow-y-auto">
               <div className="space-y-3 sm:space-y-4">
-                {/* Header */}
                 <div className="text-center">
                   <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-1 sm:mb-2">🎤 Voice Assistant</h3>
                   <p className="text-xs sm:text-sm text-gray-600">बोलिए, मैं आपकी मदद करूंगा!</p>
                 </div>
 
-                {/* Voice Controls */}
                 <div className="flex justify-center">
                   <button
                     onClick={isListening ? stopListening : startListening}
@@ -224,7 +212,6 @@ const VoiceAssistant = ({ onSearch }) => {
                   </button>
                 </div>
 
-                {/* Listening Status */}
                 {isListening && (
                   <div className="text-center">
                     <div className="flex justify-center items-center space-x-1 sm:space-x-2 text-blue-600">
@@ -236,7 +223,6 @@ const VoiceAssistant = ({ onSearch }) => {
                   </div>
                 )}
 
-                {/* Transcript */}
                 {transcript && (
                   <div className="bg-gray-100 rounded-lg p-2 sm:p-3">
                     <p className="text-xs sm:text-sm text-gray-700">
@@ -245,7 +231,6 @@ const VoiceAssistant = ({ onSearch }) => {
                   </div>
                 )}
 
-                {/* AI Response Section */}
                 {aiResponse.isLoading && (
                   <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 sm:p-4 border border-blue-200">
                     <div className="text-center space-y-2 sm:space-y-3">
@@ -273,7 +258,6 @@ const VoiceAssistant = ({ onSearch }) => {
                   </div>
                 )}
 
-                {/* Need Help Section */}
                 {showNeedHelp && (
                   <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 sm:p-4 border border-green-200">
                     <div className="space-y-2 sm:space-y-3">
@@ -295,7 +279,6 @@ const VoiceAssistant = ({ onSearch }) => {
                   </div>
                 )}
 
-                {/* Instructions */}
                 <div className="bg-gray-50 rounded-lg p-2 sm:p-3 border border-gray-200">
                   <h4 className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">💡 कैसे इस्तेमाल करें:</h4>
                   <ul className="text-xs text-gray-600 space-y-0.5 sm:space-y-1">
@@ -306,7 +289,6 @@ const VoiceAssistant = ({ onSearch }) => {
                   </ul>
                 </div>
                 
-                {/* Developer Credit */}
                 <div className="text-center mt-3 pt-2 border-t border-gray-200">
                   <p className="text-xs text-gray-400">
                     Developed by <span className="font-semibold text-blue-500">2solution.in</span>

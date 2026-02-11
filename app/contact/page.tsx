@@ -18,7 +18,7 @@ import Script from 'next/script';
 import HeroSection from '@/components/HeroSection';
 
 // Next.js requires NEXT_PUBLIC_ prefix for client-side env vars
-const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'http://0.0.0.0:3001';
+const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'https://ezy-lonebackend.vercel.app';
 
 const Contact = () => {
   const [formData, setFormData] = useState({

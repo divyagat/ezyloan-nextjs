@@ -1,13 +1,12 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Image as ImageIcon, 
-  MessageSquare, 
-  FileText, 
-  LogOut, 
+import {
+  LayoutDashboard,
+  Image as ImageIcon,
+  MessageSquare,
+  FileText,
+  LogOut,
   Users,
   Upload,
   Trash2,
@@ -21,13 +20,29 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'http://0.0.0.0:3001';
+const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || 'https://ezy-lonebackend.vercel.app';
+
+// TypeScript Interfaces
+interface User {
+  username: string;
+  [key: string]: any;
+}
+
+interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+interface LoginResponse {
+  token: string;
+  user: User;
+}
 
 // Main Admin Application
 export default function AdminApp() {
-  const [currentPage, setCurrentPage] = useState('login');
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [currentPage, setCurrentPage] = useState<string>('login');
+  const [user, setUser] = useState<User | null>(null); // ✅ Fixed type
+  const [token, setToken] = useState<string | null>(null); // ✅ Fixed type
   const router = useRouter();
 
   useEffect(() => {
@@ -36,7 +51,7 @@ export default function AdminApp() {
     const savedUser = localStorage.getItem('user');
     
     if (savedToken && savedUser) {
-      setToken(savedToken);
+      setToken(savedToken); // ✅ Now accepts string
       setUser(JSON.parse(savedUser));
       setCurrentPage('dashboard');
       axios.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
@@ -53,24 +68,23 @@ export default function AdminApp() {
     }
   }, []);
 
-  const handleLogin = async (credentials) => {
+  const handleLogin = async (credentials: LoginCredentials) => {
     try {
-      const response = await axios.post(`${SERVER_HOST}/api/auth/login`, credentials);
+      const response = await axios.post<LoginResponse>(`${SERVER_HOST}/api/auth/login`, credentials);
       const { token, user } = response.data;
       
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      
       setToken(token);
       setUser(user);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setCurrentPage('dashboard');
       
       return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Invalid credentials' 
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Invalid credentials'
       };
     }
   };
@@ -90,8 +104,8 @@ export default function AdminApp() {
   }
 
   return (
-    <AdminDashboard 
-      user={user} 
+    <AdminDashboard
+      user={user}
       onLogout={handleLogout}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
@@ -100,20 +114,19 @@ export default function AdminApp() {
 }
 
 // Login Page Component
-function AdminLogin({ onLogin }) {
-  const [formData, setFormData] = useState({ username: '', password: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
+function AdminLogin({ onLogin }: { onLogin: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string }> }) {
+  const [formData, setFormData] = useState<LoginCredentials>({ username: '', password: '' });
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
-
-    const result = await onLogin(formData);
     
+    const result = await onLogin(formData);
     if (!result.success) {
-      setError(result.message);
+      setError(result.message || 'Login failed');
     }
     
     setIsSubmitting(false);
@@ -129,7 +142,6 @@ function AdminLogin({ onLogin }) {
           <h1 className="text-2xl font-bold text-gray-800 mb-2">EzyLoan Admin</h1>
           <p className="text-gray-600">Access Dashboard</p>
         </div>
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
@@ -146,7 +158,6 @@ function AdminLogin({ onLogin }) {
               />
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <div className="relative">
@@ -162,13 +173,11 @@ function AdminLogin({ onLogin }) {
               />
             </div>
           </div>
-
           {error && (
             <div className="bg-red-50 text-red-800 p-3 rounded-lg text-sm border border-red-200">
               {error}
             </div>
           )}
-
           <button
             type="submit"
             disabled={isSubmitting}
@@ -183,7 +192,17 @@ function AdminLogin({ onLogin }) {
 }
 
 // Main Dashboard Component
-function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
+function AdminDashboard({ 
+  user, 
+  onLogout, 
+  currentPage, 
+  setCurrentPage 
+}: { 
+  user: User | null; 
+  onLogout: () => void; 
+  currentPage: string; 
+  setCurrentPage: (page: string) => void;
+}) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [dashboardStats, setDashboardStats] = useState({
     totalContacts: 0,
@@ -191,13 +210,13 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
     pendingApplications: 0,
     totalBanners: 0
   });
-  const [banners, setBanners] = useState([]);
-  const [contacts, setContacts] = useState([]);
-  const [loans, setLoans] = useState([]);
-  const [selectedPage, setSelectedPage] = useState('home');
+  const [banners, setBanners] = useState<any[]>([]);
+  const [contacts, setContacts] = useState<any[]>([]);
+  const [loans, setLoans] = useState<any[]>([]);
+  const [selectedPage, setSelectedPage] = useState<string>('home');
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedContact, setSelectedContact] = useState(null);
-  const [selectedLoan, setSelectedLoan] = useState(null);
+  const [selectedContact, setSelectedContact] = useState<any | null>(null);
+  const [selectedLoan, setSelectedLoan] = useState<any | null>(null);
   const [loading, setLoading] = useState({
     banners: false,
     contacts: false,
@@ -237,11 +256,11 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
         axios.get(`${SERVER_HOST}/api/loans`),
         axios.get(`${SERVER_HOST}/api/banners`)
       ]);
-
+      
       setDashboardStats({
         totalContacts: contactsRes.data.length,
         totalLoanApplications: loansRes.data.length,
-        pendingApplications: loansRes.data.filter(loan => loan.status === 'pending').length,
+        pendingApplications: loansRes.data.filter((loan: any) => loan.status === 'pending').length,
         totalBanners: bannersRes.data.length
       });
     } catch (error) {
@@ -288,25 +307,25 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
     }
   };
 
-  const handleFileUpload = async (event) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
+    
     if (!file.type.startsWith('image/')) {
       alert('Please select an image file');
       return;
     }
-
+    
     if (file.size > 5 * 1024 * 1024) {
       alert('File size should be less than 5MB');
       return;
     }
-
+    
     setIsUploading(true);
     const formData = new FormData();
     formData.append('image', file);
     formData.append('page', selectedPage);
-
+    
     try {
       await axios.post(`${SERVER_HOST}/api/banners`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -317,14 +336,14 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
       console.error('Error uploading banner:', error);
       alert('Error uploading banner. Please try again.');
     }
-
+    
     setIsUploading(false);
     event.target.value = '';
   };
 
-  const handleDeleteBanner = async (bannerId) => {
+  const handleDeleteBanner = async (bannerId: string) => {
     if (!window.confirm('Are you sure you want to delete this banner?')) return;
-
+    
     try {
       await axios.delete(`${SERVER_HOST}/api/banners/${bannerId}`);
       fetchBanners();
@@ -335,9 +354,9 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
     }
   };
 
-  const handleDeleteContact = async (contactId) => {
+  const handleDeleteContact = async (contactId: string) => {
     if (!window.confirm('Are you sure you want to delete this contact?')) return;
-
+    
     try {
       await axios.delete(`${SERVER_HOST}/api/contacts/${contactId}`);
       fetchContacts();
@@ -348,7 +367,7 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
     }
   };
 
-  const handleStatusUpdate = async (loanId, status) => {
+  const handleStatusUpdate = async (loanId: string, status: string) => {
     try {
       await axios.put(`${SERVER_HOST}/api/loans/${loanId}/status`, { status });
       fetchLoans();
@@ -359,9 +378,9 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
     }
   };
 
-  const handleDeleteLoan = async (loanId) => {
+  const handleDeleteLoan = async (loanId: string) => {
     if (!window.confirm('Are you sure you want to delete this loan application?')) return;
-
+    
     try {
       await axios.delete(`${SERVER_HOST}/api/loans/${loanId}`);
       fetchLoans();
@@ -376,20 +395,20 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
   const CurrentComponent = menuItems.find(item => item.id === currentPage)?.component || menuItems[0].component;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" id="admin-app">
       {/* Mobile menu overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
-
+      
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 z-50 h-screen w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out
-          ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} 
-          lg:translate-x-0`}
+        ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+        lg:translate-x-0`}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <h1 className="text-lg font-bold text-blue-600 tracking-wide">
@@ -402,7 +421,6 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
             <X className="h-6 w-6" />
           </button>
         </div>
-
         <nav className="mt-6 space-y-1 px-3">
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -414,11 +432,11 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
                   setIsMobileMenuOpen(false);
                 }}
                 className={`flex items-center w-full px-4 py-3 text-sm font-medium rounded-lg transition-colors
-                  ${
-                    currentPage === item.id
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  }`}
+                ${
+                  currentPage === item.id
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                }`}
               >
                 <Icon className="h-5 w-5 mr-3" />
                 {item.name}
@@ -426,7 +444,6 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
             );
           })}
         </nav>
-
         <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200">
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
@@ -453,7 +470,7 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
       <div className="lg:ml-64">
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-6">
-          <button 
+          <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="lg:hidden text-gray-500 hover:text-gray-700"
           >
@@ -471,7 +488,6 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
           <CurrentComponent
             // Dashboard props
             stats={dashboardStats}
-            
             // Banners props
             banners={banners}
             selectedPage={selectedPage}
@@ -480,14 +496,12 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
             onFileUpload={handleFileUpload}
             onDeleteBanner={handleDeleteBanner}
             loadingBanners={loading.banners}
-            
             // Contacts props
             contacts={contacts}
             selectedContact={selectedContact}
             setSelectedContact={setSelectedContact}
             onDeleteContact={handleDeleteContact}
             loadingContacts={loading.contacts}
-            
             // Loans props
             loans={loans}
             selectedLoan={selectedLoan}
@@ -503,7 +517,7 @@ function AdminDashboard({ user, onLogout, currentPage, setCurrentPage }) {
 }
 
 // Dashboard Overview Component
-function DashboardOverview({ stats }) {
+function DashboardOverview({ stats }: { stats: any }) {
   const router = useRouter();
   
   const statCards = [
@@ -519,7 +533,7 @@ function DashboardOverview({ stats }) {
         <h3 className="text-2xl font-bold text-gray-800 mb-2">Dashboard Overview</h3>
         <p className="text-gray-600">Welcome to EzyLoan Admin Panel</p>
       </div>
-
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
         {statCards.map((card, index) => (
           <div key={index} className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-gray-100 hover:shadow-md transition-shadow">
@@ -541,21 +555,21 @@ function DashboardOverview({ stats }) {
           <h4 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h4>
           <div className="space-y-3">
             <button
-              onClick={() => document.getElementById('admin-app').scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => document.getElementById('admin-app')?.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors w-full text-left"
             >
               <ImageIcon className="h-5 w-5 text-blue-600 mr-3" />
               <span className="font-medium text-blue-600">Manage Banners</span>
             </button>
             <button
-              onClick={() => document.getElementById('admin-app').scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => document.getElementById('admin-app')?.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors w-full text-left"
             >
               <MessageSquare className="h-5 w-5 text-green-600 mr-3" />
               <span className="font-medium text-green-600">View Contacts</span>
             </button>
             <button
-              onClick={() => document.getElementById('admin-app').scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => document.getElementById('admin-app')?.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors w-full text-left"
             >
               <FileText className="h-5 w-5 text-purple-600 mr-3" />
@@ -598,14 +612,22 @@ function DashboardOverview({ stats }) {
 }
 
 // Banners Manager Component
-function BannersManager({ 
-  banners, 
-  selectedPage, 
-  setSelectedPage, 
-  isUploading, 
-  onFileUpload, 
+function BannersManager({
+  banners,
+  selectedPage,
+  setSelectedPage,
+  isUploading,
+  onFileUpload,
   onDeleteBanner,
   loadingBanners
+}: {
+  banners: any[];
+  selectedPage: string;
+  setSelectedPage: (page: string) => void;
+  isUploading: boolean;
+  onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onDeleteBanner: (bannerId: string) => void;
+  loadingBanners: boolean;
 }) {
   const pages = [
     { value: 'home', label: 'Home' },
@@ -645,7 +667,6 @@ function BannersManager({
               ))}
             </select>
           </div>
-
           <div className="w-full sm:w-auto">
             <label className="block text-sm font-medium text-gray-700 mb-2">Upload Banner</label>
             <label className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors cursor-pointer w-full sm:w-auto">
@@ -669,7 +690,6 @@ function BannersManager({
             {pages.find(p => p.value === selectedPage)?.label} Banners ({filteredBanners.length})
           </h4>
         </div>
-
         <div className="p-4 md:p-6">
           {loadingBanners ? (
             <div className="flex justify-center py-8">
@@ -691,8 +711,9 @@ function BannersManager({
                       alt="Banner"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://via.placeholder.com/400x200?text=Image+Not+Found';
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = 'https://via.placeholder.com/400x200?text=Image+Not+Found';
                       }}
                     />
                   </div>
@@ -726,12 +747,18 @@ function BannersManager({
 }
 
 // Contacts Manager Component
-function ContactsManager({ 
-  contacts, 
-  selectedContact, 
-  setSelectedContact, 
+function ContactsManager({
+  contacts,
+  selectedContact,
+  setSelectedContact,
   onDeleteContact,
   loadingContacts
+}: {
+  contacts: any[];
+  selectedContact: any | null;
+  setSelectedContact: (contact: any | null) => void;
+  onDeleteContact: (contactId: string) => void;
+  loadingContacts: boolean;
 }) {
   return (
     <div>
@@ -744,7 +771,6 @@ function ContactsManager({
         <div className="p-4 md:p-6 border-b border-gray-200">
           <h4 className="text-lg font-semibold text-gray-800">All Contacts ({contacts.length})</h4>
         </div>
-
         <div className="overflow-x-auto">
           {loadingContacts ? (
             <div className="flex justify-center py-12">
@@ -851,7 +877,7 @@ function ContactsManager({
 }
 
 // Helper component for contact details
-function DetailItem({ label, value, isTextArea }) {
+function DetailItem({ label, value, isTextArea }: { label: string; value: string; isTextArea?: boolean }) {
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
@@ -863,13 +889,20 @@ function DetailItem({ label, value, isTextArea }) {
 }
 
 // Loans Manager Component
-function LoansManager({ 
-  loans, 
-  selectedLoan, 
-  setSelectedLoan, 
-  onStatusUpdate, 
+function LoansManager({
+  loans,
+  selectedLoan,
+  setSelectedLoan,
+  onStatusUpdate,
   onDeleteLoan,
   loadingLoans
+}: {
+  loans: any[];
+  selectedLoan: any | null;
+  setSelectedLoan: (loan: any | null) => void;
+  onStatusUpdate: (loanId: string, status: string) => void;
+  onDeleteLoan: (loanId: string) => void;
+  loadingLoans: boolean;
 }) {
   return (
     <div>
@@ -882,7 +915,6 @@ function LoansManager({
         <div className="p-4 md:p-6 border-b border-gray-200">
           <h4 className="text-lg font-semibold text-gray-800">All Applications ({loans.length})</h4>
         </div>
-
         <div className="overflow-x-auto">
           {loadingLoans ? (
             <div className="flex justify-center py-12">
@@ -1007,7 +1039,6 @@ function LoansManager({
                   </div>
                 </div>
               </div>
-              
               <div className="mt-6 pt-4 border-t border-gray-100">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Application Date</label>
                 <p className="text-gray-900">
@@ -1055,30 +1086,30 @@ function LoansManager({
 }
 
 // Status Badge Component
-function StatusBadge({ status, large = false }) {
-  const statusConfig = {
-    approved: { 
-      text: 'Approved', 
-      bg: 'bg-green-100', 
+function StatusBadge({ status, large = false }: { status: string; large?: boolean }) {
+  const statusConfig: Record<string, { text: string; bg: string; textClass: string; dot: string }> = {
+    approved: {
+      text: 'Approved',
+      bg: 'bg-green-100',
       textClass: 'text-green-800',
       dot: 'bg-green-500'
     },
-    rejected: { 
-      text: 'Rejected', 
-      bg: 'bg-red-100', 
+    rejected: {
+      text: 'Rejected',
+      bg: 'bg-red-100',
       textClass: 'text-red-800',
       dot: 'bg-red-500'
     },
-    pending: { 
-      text: 'Pending', 
-      bg: 'bg-yellow-100', 
+    pending: {
+      text: 'Pending',
+      bg: 'bg-yellow-100',
       textClass: 'text-yellow-800',
       dot: 'bg-yellow-500'
     }
   };
-  
+
   const config = statusConfig[status] || statusConfig.pending;
-  
+
   return (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.textClass}`}>
       <span className={`inline-block w-2 h-2 mr-1 rounded-full ${config.dot}`}></span>
