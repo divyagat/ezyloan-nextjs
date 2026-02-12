@@ -161,7 +161,7 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onSearch }) => {
             </button>
           </div>
           
-          <button
+          {/* <button
             onClick={toggleAssistant}
             className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center ${
               isOpen
@@ -178,9 +178,9 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onSearch }) => {
 
           {isListening && (
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 animate-ping opacity-75"></div>
-          )}
+          )} */}
 
-          {isOpen && (
+          {/* {isOpen && (
             <div className="absolute bottom-16 sm:bottom-20 right-0 w-72 sm:w-80 md:w-96 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-6 transform transition-all duration-300 scale-100 max-h-[80vh] overflow-y-auto">
               <div className="space-y-3 sm:space-y-4">
                 <div className="text-center">
@@ -210,9 +210,9 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onSearch }) => {
                       </>
                     )}
                   </button>
-                </div>
+                </div> */}
 
-                {isListening && (
+                {/* {isListening && (
                   <div className="text-center">
                     <div className="flex justify-center items-center space-x-1 sm:space-x-2 text-blue-600">
                       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-bounce"></div>
@@ -296,7 +296,7 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onSearch }) => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </>

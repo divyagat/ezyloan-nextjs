@@ -17,7 +17,7 @@ interface HeroProps {
   subtitle?: string;
 }
 
-const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || "";
+const SERVER_HOST = process.env.NEXT_PUBLIC_SERVER_HOST || "https://ezy-lonebackend.vercel.app";
 
 // Fallback image must exist in public folder
 const FALLBACK_BANNER = "/fallback-banner.jpg";
@@ -185,95 +185,79 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
 
   return (
     <section
-      id={page === "home" ? "home" : undefined}
-      className={`relative overflow-hidden ${page === "home"
-          ? "min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50"
-          : "min-h-[16vh]"
-        }`}
+      id={page === 'home' ? 'home' : ''}
+      className={`relative overflow-hidden ${
+        page === 'home'
+          ? 'min-h-screen md:min-h-screen max-sm:min-h-[45vh] bg-gradient-to-br from-blue-50 via-white to-cyan-50'
+          : 'min-h-[16vh]'
+      }`}
     >
+      {/* Animated Background (only for home) */}
+      {page === 'home' && (
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-4 -left-4 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/2 -right-4 w-96 h-96 bg-gradient-to-br from-cyan-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-gradient-to-br from-blue-300/20 to-cyan-300/20 rounded-full blur-3xl animate-pulse delay-500"></div>
+        </div>
+      )}
+
       {/* Banner Carousel */}
-      <div className={`w-full relative z-10 ${page === "home" ? "pt-24" : ""}`}>
-        <div className="relative w-full h-[50vh] md:h-[400px] overflow-hidden">
+      <div className={`w-full relative z-10 ${page === 'home' ? 'pt-24' : ''}`}>
+        <div className="relative w-full h-[50vh] md:min-h-[400px] md:h-[50vh] sm:h-[60vh] max-sm:h-[129px] overflow-hidden">
           {banners.map((banner, index) => (
             <div
               key={banner._id}
-              className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${currentSlide === index ? "opacity-100" : "opacity-0"
-                }`}
+              className={`absolute top-0 left-0 w-full h-full transition-all duration-1000 ${
+                currentSlide === index ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+              }`}
             >
-              {/* CRITICAL FIX: Validate src before rendering Image */}
-              {banner.image && typeof banner.image === "string" && banner.image.trim() !== "" ? (
-                <Image
-                  src={banner.image}
-                  alt={`Banner ${index + 1} for ${page}`}
-                  fill
-                  className="object-cover"
-                  priority={index === 0 && page === "home"}
-                  unoptimized // Prevents crash for external domains not in next.config.js
-                  onError={(e) => {
-                    // Fallback to default image on load error
-                    (e.target as HTMLImageElement).src = FALLBACK_BANNER;
-                  }}
-                />
-              ) : (
-                // Fallback if validation fails at render time
-                <Image
-                  src={FALLBACK_BANNER}
-                  alt="Fallback banner"
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              )}
+              {/* ✅ FIXED: Use banner.image directly */}
+              <img
+                src={banner.image}
+                alt={`Banner ${index + 1}`}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-
-              {title && page === "home" && (
+              {/* Optional Title/SubTitle for home */}
+              {title && page === 'home' && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white px-4 max-w-3xl">
-                    <h1 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-md">
-                      {title}
-                    </h1>
-                    {subtitle && (
-                      <p className="text-lg md:text-xl drop-shadow-md">
-                        {subtitle}
-                      </p>
-                    )}
+                  <div className="text-center text-white px-4">
+                    <h1 className="text-3xl md:text-4xl font-bold mb-2">{title}</h1>
+                    {subtitle && <p className="text-lg md:text-xl">{subtitle}</p>}
                   </div>
                 </div>
               )}
             </div>
           ))}
 
-          {/* Indicators (only show if multiple banners) */}
+          {/* Indicators */}
           {banners.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
               {banners.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition ${currentSlide === index ? "bg-white scale-110" : "bg-white/50"
-                    }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                  aria-current={currentSlide === index ? "true" : "false"}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    currentSlide === index ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
+                  }`}
                 />
               ))}
             </div>
           )}
 
-          {/* Navigation arrows (only show if multiple banners) */}
+          {/* Arrows */}
           {banners.length > 1 && (
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/30 rounded-full flex items-center justify-center text-white text-2xl z-20 hover:bg-black/50 transition"
-                aria-label="Previous banner"
+                className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300"
               >
                 ‹
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/30 rounded-full flex items-center justify-center text-white text-2xl z-20 hover:bg-black/50 transition"
-                aria-label="Next banner"
+                className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300"
               >
                 ›
               </button>
