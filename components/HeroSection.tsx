@@ -186,11 +186,10 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
   return (
     <section
       id={page === 'home' ? 'home' : ''}
-      className={`relative overflow-hidden ${
-        page === 'home'
+      className={`relative overflow-hidden ${page === 'home'
           ? 'min-h-screen md:min-h-screen max-sm:min-h-[45vh] bg-gradient-to-br from-blue-50 via-white to-cyan-50'
           : 'min-h-[16vh]'
-      }`}
+        }`}
     >
       {/* Animated Background (only for home) */}
       {page === 'home' && (
@@ -202,69 +201,67 @@ const HeroSection: React.FC<HeroProps> = ({ page, title, subtitle }) => {
       )}
 
       {/* Banner Carousel */}
+      {/* Banner Carousel */}
       <div className={`w-full relative z-10 ${page === 'home' ? 'pt-24' : ''}`}>
-        <div className="relative w-full h-[50vh] md:min-h-[400px] md:h-[50vh] sm:h-[60vh] max-sm:h-[129px] overflow-hidden">
-          {banners.map((banner, index) => (
-            <div
-              key={banner._id}
-              className={`absolute top-0 left-0 w-full h-full transition-all duration-1000 ${
-                currentSlide === index ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-              }`}
-            >
-              {/* ✅ FIXED: Use banner.image directly */}
-              <img
-                src={banner.image}
-                alt={`Banner ${index + 1}`}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        <div className="max-w-7xl mx-auto ">
+          <div className="relative w-full h-[50vh] md:min-h-[400px] md:h-[50vh] sm:h-[60vh] max-sm:h-[129px] rounded-2xl overflow-hidden shadow-lg">
 
-              {/* Optional Title/SubTitle for home */}
-              {title && page === 'home' && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white px-4">
-                    <h1 className="text-3xl md:text-4xl font-bold mb-2">{title}</h1>
-                    {subtitle && <p className="text-lg md:text-xl">{subtitle}</p>}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-
-          {/* Indicators */}
-          {banners.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              {banners.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    currentSlide === index ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
+            {banners.map((banner, index) => (
+              <div
+                key={banner._id}
+                className={`absolute inset-0 transition-all duration-700 ease-in-out ${currentSlide === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
                   }`}
+              >
+                {/* Background Image */}
+                <img
+                  src={banner.image}
+                  alt={`Banner ${index + 1}`}
+                  className="w-full h-full object-cover"
                 />
-              ))}
-            </div>
-          )}
 
-          {/* Arrows */}
-          {banners.length > 1 && (
-            <>
-              <button
-                onClick={prevSlide}
-                className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300"
-              >
-                ‹
-              </button>
-              <button
-                onClick={nextSlide}
-                className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300"
-              >
-                ›
-              </button>
-            </>
-          )}
+                {/* Soft Overlay */}
+                <div className="absolute inset-0 bg-black/10"></div>
+              </div>
+            ))}
+
+            {/* DOT INDICATORS */}
+            {banners.length > 1 && (
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                {banners.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`transition-all duration-300 ${currentSlide === index
+                        ? "w-6 h-2 bg-white rounded-full"
+                        : "w-2 h-2 bg-white/60 rounded-full"
+                      }`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* LEFT / RIGHT ARROWS */}
+            {banners.length > 1 && (
+              <>
+                <button
+                  onClick={prevSlide}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full shadow flex items-center justify-center text-gray-700 transition"
+                >
+                  ‹
+                </button>
+
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full shadow flex items-center justify-center text-gray-700 transition"
+                >
+                  ›
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
+
 
       {/* Banking Partners (home only) */}
       {page === "home" && (

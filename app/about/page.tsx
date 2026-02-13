@@ -74,7 +74,7 @@ const About = () => {
         
 
         {/* Hero Image Section */}
-        <div className="relative mb-16 max-w-7xl mx-auto overflow-hidden rounded-2xl shadow-xl">
+        <div className="relative mb-16 max-w-7xl mx-auto overflow-hidden rounded-2xl shadow-xl mt-8">
           <HeroSection
             page="about"
             title="About EzyLoan"

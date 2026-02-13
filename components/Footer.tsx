@@ -38,18 +38,18 @@ const Footer = () => {
     ],
     resources: [
       { name: "EMI Calculator", href: "/emi-calculator" },
-      { name: "Loan Guide", href: "/loan-guide" },
-      { name: "Financial Tips", href: "/financial-tips" },
-      { name: "Customer Support", href: "/support" },
+      // { name: "Loan Guide", href: "/loan-guide" },
+      // { name: "Financial Tips", href: "/financial-tips" },
+      // { name: "Customer Support", href: "/support" },
       { name: "FAQs", href: "/faq" },
-      { name: "Interest Rates", href: "/interest-rates" },
+      // { name: "Interest Rates", href: "/interest-rates" },
     ],
     legal: [
       { name: "Privacy Policy", href: "/privacy-policy" },
-      { name: "Terms of Service", href: "/terms" },
-      { name: "Cookie Policy", href: "/cookie-policy" },
-      { name: "Grievance Redressal", href: "/grievance-redressal" },
-      { name: "Regulatory Compliance", href: "/compliance" },
+      { name: "Terms of Service", href: "/privacy-policy" },
+      // { name: "Cookie Policy", href: "/cookie-policy" },
+      // { name: "Grievance Redressal", href: "/grievance-redressal" },
+      // { name: "Regulatory Compliance", href: "/compliance" },
     ],
   };
 
